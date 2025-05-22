@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kado Kecil untukmu, Masni</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #4c0519;
+            --secondary: #fef3c7;
+            --accent: #FFD700; /* Soft Gold */
+            --text-soft: #800020; /* Dark Burgundy */
+            --bg-gradient-1: #4c0519;
+            --bg-gradient-2: #fef3c7;
+            --button-hover-gold: #DAA520; /* Muted Gold */
+            --pink-accent: #C71585; /* Deep Rose */
+            --light-pink: #FFFFF0; /* Ivory */
+            --jasmine-white: #FFFACD;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            perspective: 1200px;
+            color: var(--text-soft);
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .rose-petal {
+            position: absolute;
+            width: 15px;
+            height: 10px;
+            background: #e11d48;
+            clip-path: ellipse(50% 30% at 50% 50%);
+            opacity: 0.8;
+            animation: fallPetal 15s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fallPetal {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 0.8; }
+            50% { opacity: 0.9; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .heart-twinkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0;
+            animation: twinkle 3s infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .dove {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background-color: var(--light-pink);
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30"><path d="M48.7,12.3c-1.2-1-2.8-1.5-4.5-1.5h-10.4c-1.7,0-3.3,0.5-4.5,1.5L20.8,22.7c-0.6,0.5-1.4,0.8-2.2,0.8h-5.8c-0.8,0-1.6-0.3-2.2-0.8L0.7,12.3C0.3,12,0,11.5,0,11V9c0-0.6,0.4-1,1-1h48c0.6,0,1,0.4,1,1v2C50,11.5,49.7,12,49.3,12.3L48.7,12.3zM25,28c-1.1,0-2-0.9-2-2v-6c0-1.1,0.9-2,2-2s2,0.9,2,2v6C27,27.1,26.1,28,25,28z"/></svg>') no-repeat center;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 30"><path d="M48.7,12.3c-1.2-1-2.8-1.5-4.5-1.5h-10.4c-1.7,0-3.3,0.5-4.5,1.5L20.8,22.7c-0.6,0.5-1.4,0.8-2.2,0.8h-5.8c-0.8,0-1.6-0.3-2.2-0.8L0.7,12.3C0.3,12,0,11.5,0,11V9c0-0.6,0.4-1,1-1h48c0.6,0,1,0.4,1,1v2C50,11.5,49.7,12,49.3,12.3L48.7,12.3zM25,28c-1.1,0-2-0.9-2-2v-6c0-1.1,0.9-2,2-2s2,0.9,2,2v6C27,27.1,26.1,28,25,28z"/></svg>') no-repeat center;
+            mask-size: contain;
+            -webkit-mask-size: contain;
+            opacity: 0;
+            animation: flyDove 20s linear infinite;
+            z-index: 5;
+            pointer-events: none;
+            transform: scaleX(-1);
+        }
+
+        @keyframes flyDove {
+            0% { transform: translateX(-100vw) translateY(50vh) scaleX(-1); opacity: 0; }
+            10% { opacity: 1; }
+            45% { transform: translateX(50vw) translateY(20vh) scaleX(-1); opacity: 1; }
+            50% { transform: translateX(50vw) translateY(20vh) scaleX(1); opacity: 1; }
+            90% { transform: translateX(100vw) translateY(60vh) scaleX(1); opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .firefly {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--pink-accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--pink-accent), 0 0 15px var(--pink-accent);
+            opacity: 0;
+            animation: floatTwinkle 8s ease-in-out infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes floatTwinkle {
+            0% { transform: translate(0, 0); opacity: 0; }
+            25% { opacity: 1; transform: translate(20px, -20px); }
+            50% { opacity: 0.5; transform: translate(0, -40px); }
+            75% { opacity: 1; transform: translate(-20px, -20px); }
+            100% { opacity: 0; transform: translate(0, 0); }
+        }
+
+        .jasmine-flower {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--jasmine-white);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            opacity: 0.7;
+            animation: floatJasmine 18s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatJasmine {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 0.7; }
+            50% { opacity: 0.9; transform: translateY(0vh) rotate(180deg); }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .sparkle-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #FFF;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        .main-card {
+            background: var(--secondary);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(218, 165, 32, 0.2);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 10;
+            border: 3px solid var(--accent);
+            padding: 2.5rem;
+        }
+
+        .main-card:hover {
+            transform: scale(1.01) rotateX(1deg);
+        }
+
+        .gift-box {
+            margin: 3rem auto;
+            width: 100%;
+            max-width: 750px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .gift-box-content {
+            background: var(--secondary);
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .gift-box.open .gift-box-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .vintage-frame {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #222;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 5px solid #333;
+        }
+
+        .vintage-frame video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .photo-display {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            height: 400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid var(--accent);
+            border-radius: 15px;
+            background-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        .gallery-photo-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gallery-photo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            filter: grayscale(10%) sepia(5%) brightness(105%);
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+        }
+
+        .gallery-photo.active {
+            opacity: 1;
+        }
+
+        .photo-nav {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .poem-text {
+            max-width: 600px;
+            display: inline-block;
+            text-align: center;
+            font-family: 'Great Vibes', 'Playfair Display', serif;
+            font-size: 2.5rem;
+            line-height: 1.6;
+            color: #800020;
+            text-shadow: 0 0 8px rgba(199, 21, 133, 0.8), 0 0 15px rgba(255, 215, 0, 0.5);
+            animation: pulseGlow 2s ease-in-out infinite;
+            padding: 1rem;
+            min-height: 200px;
+            background: linear-gradient(to right, #FFD700, #DAA520);
+            background-color: rgba(255, 215, 0, 0.7);
+            border: 1px solid #DAA520;
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poem-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+            transform: skewX(-25deg);
+            transition: all 1s ease;
+        }
+
+        .poem-text:hover::before {
+            left: 100%;
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 8px rgba(199, 21, 133, 0.8), 0 0 15px rgba(255, 215, 0, 0.5); }
+            50% { text-shadow: 0 0 12px rgba(199, 21, 133, 1), 0 0 20px rgba(255, 215, 0, 0.7); }
+            100% { text-shadow: 0 0 8px rgba(199, 21, 133, 0.8), 0 0 15px rgba(255, 215, 0, 0.5); }
+        }
+
+        .romantic-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(to right, var(--accent), var(--button-hover-gold));
+            color: var(--primary);
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .romantic-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, var(--button-hover-gold), var(--accent));
+        }
+
+        .romantic-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+            transform: skewX(-25deg);
+            transition: all 0.75s ease;
+        }
+
+        .romantic-btn:hover::before {
+            left: 100%;
+        }
+
+        .romantic-btn::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            top: 10%;
+            left: 10%;
+            opacity: 0;
+            animation: sparkle 3s infinite;
+        }
+
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.8; transform: scale(1.5); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 40px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            border: 1px solid var(--accent);
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            color: var(--text-soft);
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.15);
+            background: var(--button-hover-gold);
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .fade-in-delay-1 {
+            animation: fadeIn 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+            opacity: 0;
+        }
+
+        .fade-in-delay-2 {
+            animation: fadeIn 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards;
+            opacity: 0;
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 1.5rem;
+            }
+
+            .gift-box-content {
+                padding: 2rem;
+            }
+
+            .vintage-frame {
+                max-width: 400px;
+                padding: 10px;
+            }
+
+            .photo-display {
+                max-width: 300px;
+                height: 350px;
+            }
+
+            .poem-text {
+                max-width: 90%;
+                font-size: 1.8rem;
+                min-height: 150px;
+            }
+
+            .romantic-btn {
+                padding: 0.7rem 2rem;
+                font-size: 1.1rem;
+            }
+
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 15px;
+                gap: 10px;
+            }
+
+            .play-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-card {
+                padding: 1rem;
+            }
+            .gift-box-content {
+                padding: 1.5rem;
+            }
+            .poem-text {
+                font-size: 1.4rem;
+                min-height: 120px;
+            }
+            .romantic-btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .photo-nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-container"></div>
+
+    <div class="flex items-center justify-center min-h-screen px-4 py-16">
+        <div class="main-card max-w-4xl w-full">
+            <div id="initial-screen" class="gift-box open">
+                <div class="gift-box-content text-center">
+                    <h2 class="text-5xl font-bold mb-8 fade-in" style="font-family: 'Great Vibes', 'Playfair Display', serif; color: var(--primary); text-shadow: 0 0 15px rgba(76, 5, 25, 0.6);">
+                        Buka Kado Kecil<br>untukmu, Masni
+                    </h2>
+                    <p class="text-xl mb-12 fade-in-delay-1" style="color: var(--text-soft); font-family: 'Inter', sans-serif;">
+                        Dari Irfan Silaban untukmu yang jauh di sana.
+                    </p>
+                    <button onclick="openGift(1)" class="romantic-btn mx-auto block fade-in-delay-2">
+                        Buka Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <div id="gift1" class="gift-box hidden">
+                <div class="gift-box-content">
+                    <h3 class="text-3xl font-semibold text-center mb-6" style="font-family: 'Great Vibes', 'Playfair Display', serif; color: var(--accent); text-shadow: 0 0 10px rgba(218, 165, 32, 0.5); letter-spacing: 1px;">
+                        Video Spesial untukmu
+                    </h3>
+                    <div class="vintage-frame">
+                        <video controls autoplay id="special-video" class="w-full h-auto" poster="https://placehold.co/600x400/e8b923/4c0519?text=Video+Preview" preload="metadata">
+                            <source src="videonya.mp4" type="video/mp4">
+                            Browser Anda tidak mendukung video.
+                        </video>
+                        <p class="text-sm text-center mt-2" style="color: var(--text-soft); font-family: 'Inter', sans-serif;">
+                            (Klik ikon suara pada pemutar video untuk mengaktifkan suara jika tidak terdengar.)
+                        </p>
+                    </div>
+                    <p class="text-lg text-center mt-6 mb-8" style="color: var(--text-soft); font-family: 'Inter', sans-serif;">
+                        Masni, video ini adalah detik-detik kebahagiaan yang ku susun untukmu, <br>
+                        ungkapan syukur atas senyummu yang selalu menghangatkan hatiku.
+                    </p>
+                    <button onclick="openGift(2)" class="romantic-btn mx-auto block">Lanjut ke Kado Berikutnya</button>
+                </div>
+            </div>
+
+            <div id="gift2" class="gift-box hidden">
+                <div class="gift-box-content">
+                    <h3 class="text-3xl font-semibold text-center mb-6" style="font-family: 'Great Vibes', 'Playfair Display', serif; color: var(--accent); text-shadow: 0 0 10px rgba(218, 165, 32, 0.5); letter-spacing: 1px;">
+                        Puisi untukmu, Masni
+                    </h3>
+                    <div id="poem" class="poem-text"></div>
+                    <div class="flex gap-4 justify-center mt-8 flex-wrap">
+                        <button onclick="downloadPoem()" class="romantic-btn bg-gradient-to-r from-primary to-gray-800">Unduh Puisi</button>
+                        <button onclick="openGift(3)" class="romantic-btn">Lanjut ke Kado Berikutnya</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="gift3" class="gift-box hidden">
+                <div class="gift-box-content">
+                    <h3 class="text-3xl font-semibold text-center mb-6" style="font-family: 'Great Vibes', 'Playfair Display', serif; color: var(--accent); text-shadow: 0 0 10px rgba(218, 165, 32, 0.5); letter-spacing: 1px;">
+                        Galeri Kenangan Kita
+                    </h3>
+                    <div class="photo-display">
+                        <div class="gallery-photo-container">
+                            <img id="irfan-photo" class="gallery-photo active" src="foto_irfan.jpg" alt="Foto Irfan" onerror="this.src='https://placehold.co/350x400/4c0519/fef3c7?text=Foto+Irfan';">
+                            <img id="masni-photo" class="gallery-photo" src="masni.jpg" alt="Foto Masni" onerror="this.src='https://placehold.co/350x400/e8b923/2d1b1b?text=Foto+Masni';">
+                        </div>
+                    </div>
+                    <div class="photo-nav">
+                        <button onclick="showPhoto('irfan')" class="romantic-btn">Foto Irfan</button>
+                        <button onclick="showPhoto('masni')" class="romantic-btn">Foto Masni</button>
+                    </div>
+                    <p class="text-lg text-center mt-6 mb-8" style="color: var(--text-soft); font-family: 'Inter', sans-serif;">
+                        Masni, galeri kecil ini menyimpan kenangan kita, <br>
+                        setiap foto adalah cerita kebahagiaan yang ku syukuri bersamamu.
+                    </p>
+                    <button onclick="openGift(4)" class="romantic-btn mx-auto block">Kejutan Terakhir</button>
+                </div>
+            </div>
+
+            <div id="gift4" class="gift-box hidden">
+                <div class="gift-box-content">
+                    <h3 class="text-3xl font-semibold text-center mb-6" style="font-family: 'Great Vibes', 'Playfair Display', serif; color: var(--accent); text-shadow: 0 0 10px rgba(218, 165, 32, 0.5); letter-spacing: 1px;">
+                        Rasa Syukur untukmu, Masni
+                    </h3>
+                    <p class="text-lg text-center mb-8" style="color: var(--text-soft); font-family: 'Inter', sans-serif;">
+                        Meski jarak memisahkan kita, Masni, kau adalah kebahagiaan dalam setiap detikku. <br>
+                        Aku bersyukur mengenalmu, jiwa yang penuh cinta dan cahaya. <br>
+                        Kado ini kupersembahkan dengan doa, agar senyummu selalu berseri. <br>
+                        Selamat ulang tahun, dari Irfan yang memelukmu dalam hati.
+                    </p>
+                    <button onclick="window.location.reload()" class="romantic-btn mx-auto block">Ulangi Kejutan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="music-player">
+        <div class="play-btn" id="play-btn">▶</div>
+        <span style="color: var(--text-soft); font-family: 'Inter', sans-serif;">Musik Romantis</span>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="audionya.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung audio.
+    </audio>
+
+    <script>
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'rose-petal';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = Math.random() * 5 + 10 + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('particles-container').appendChild(petal);
+            setTimeout(() => petal.remove(), 15000);
+        }
+
+        function createHeartTwinkle() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-twinkle';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.animationDuration = Math.random() * 2 + 2 + 's';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            document.getElementById('particles-container').appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+
+        function createDove() {
+            const dove = document.createElement('div');
+            dove.className = 'dove';
+            dove.style.left = -Math.random() * 20 + 'vw';
+            dove.style.top = Math.random() * 80 + 'vh';
+            dove.style.animationDuration = Math.random() * 10 + 15 + 's';
+            dove.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('particles-container').appendChild(dove);
+            setTimeout(() => dove.remove(), 20000);
+        }
+
+        function createFirefly() {
+            const firefly = document.createElement('div');
+            firefly.className = 'firefly';
+            firefly.style.left = Math.random() * 100 + 'vw';
+            firefly.style.top = Math.random() * 100 + 'vh';
+            firefly.style.animationDuration = Math.random() * 4 + 6 + 's';
+            firefly.style.animationDelay = Math.random() * 3 + 's';
+            document.getElementById('particles-container').appendChild(firefly);
+            setTimeout(() => firefly.remove(), 10000);
+        }
+
+        function createJasmineFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'jasmine-flower';
+            flower.style.left = Math.random() * 100 + 'vw';
+            flower.style.top = Math.random() * 100 + 'vh';
+            flower.style.animationDuration = Math.random() * 8 + 15 + 's';
+            flower.style.animationDelay = Math.random() * 3 + 's';
+            document.getElementById('particles-container').appendChild(flower);
+            setTimeout(() => flower.remove(), 20000);
+        }
+
+        const isMobile = window.innerWidth <= 768;
+        setInterval(createPetal, isMobile ? 300 : 150);
+        setInterval(createHeartTwinkle, isMobile ? 500 : 300);
+        setInterval(createDove, isMobile ? 4000 : 3000);
+        setInterval(createFirefly, isMobile ? 800 : 600);
+        setInterval(createJasmineFlower, isMobile ? 700 : 500);
+
+        const giftBoxIds = ['initial-screen', 'gift1', 'gift2', 'gift3', 'gift4'];
+        const audio = document.getElementById('bg-music');
+        const playBtn = document.getElementById('play-btn');
+        let isPlaying = false;
+
+        audio.play().then(() => {
+            playBtn.textContent = '⏸';
+            isPlaying = true;
+        }).catch(e => {
+            console.error("Autoplay failed:", e);
+        });
+
+        document.addEventListener('click', () => {
+            if (!isPlaying) {
+                audio.play().catch(e => console.error("Error playing audio:", e));
+                playBtn.textContent = '⏸';
+                isPlaying = true;
+            }
+        }, { once: true });
+
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.textContent = '▶';
+            } else {
+                audio.play().catch(e => console.error("Error playing audio:", e));
+                playBtn.textContent = '⏸';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        function openGift(nextGiftIndex) {
+            const currentGift = giftBoxIds.find(id => {
+                const el = document.getElementById(id);
+                return el && el.classList.contains('open');
+            });
+            const currentGiftEl = currentGift ? document.getElementById(currentGift) : null;
+            const targetGiftId = giftBoxIds[nextGiftIndex];
+            const targetGift = document.getElementById(targetGiftId);
+
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    if (targetGift) {
+                        targetGift.style.display = 'block';
+                        targetGift.classList.remove('hidden');
+                        targetGift.classList.add('open');
+
+                        const content = targetGift.querySelector('.gift-box-content');
+                        gsap.fromTo(content,
+                            { opacity: 0, scale: 0.9 },
+                            { opacity: 1, scale: 1, duration: 0.3, ease: "power3.out" }
+                        );
+
+                        confetti({
+                            particleCount: 100,
+                            spread: 80,
+                            colors: ['#e11d48', '#be123c', '#FFD700', '#C71585', '#FFFACD', '#800020'],
+                            shapes: ['circle', 'star', 'heart'],
+                            scalar: 1,
+                            duration: 500
+                        });
+
+                        if (!isMobile) {
+                            for (let i = 0; i < 5; i++) {
+                                const sparkle = document.createElement('div');
+                                sparkle.className = 'sparkle-particle';
+                                sparkle.style.left = Math.random() * 100 + '%';
+                                sparkle.style.top = Math.random() * 100 + '%';
+                                targetGift.appendChild(sparkle);
+                                gsap.to(sparkle, {
+                                    opacity: 0.8,
+                                    scale: 1.5,
+                                    duration: 0.3,
+                                    delay: Math.random() * 0.2,
+                                    ease: "power2.out",
+                                    onComplete: () => {
+                                        gsap.to(sparkle, {
+                                            opacity: 0,
+                                            scale: 0,
+                                            duration: 0.3,
+                                            ease: "power2.in",
+                                            onComplete: () => sparkle.remove()
+                                        });
+                                    }
+                                });
+                            }
+                        }
+
+                        if (targetGiftId === 'gift1') {
+                            const videoElement = document.getElementById('special-video');
+                            if (videoElement) {
+                                videoElement.play().then(() => {
+                                    videoElement.muted = false;
+                                }).catch(e => {
+                                    alert("Silakan klik ikon suara pada pemutar video untuk mengaktifkan suara.");
+                                });
+                            }
+                        } else if (targetGiftId === 'gift2') {
+                            gsap.fromTo('#poem',
+                                { opacity: 0, y: 30 },
+                                { opacity: 1, y: 0, duration: 1, ease: "power2.out", onComplete: () => {
+                                    new Typed('#poem', {
+                                        strings: [
+                                            'Selamat ulang tahun, Masni, bintang hatiku, Hari ini dirimu bercahaya, penuh keajaiban. Kasihku padamu tak pernah pudar sedikit pun, Kau adalah anugerah, kebahagiaan yang nyata. Di setiap senyummu, ku temukan dunia, Cintamu adalah lagu yang selalu ku nyanyikan. Semoga hari ini penuh tawa dan harapan, Aku di sini, mencintaimu dengan seluruh jiwa.'
+                                        ],
+                                        typeSpeed: 40,
+                                        showCursor: false
+                                    });
+                                }}
+                            );
+                        } else if (targetGiftId === 'gift3') {
+                            showPhoto('irfan');
+                        }
+                    }
+                }
+            });
+
+            if (currentGiftEl) {
+                tl.to(currentGiftEl.querySelector('.gift-box-content'),
+                    { opacity: 0, scale: 0.95, duration: 0.2, ease: "power3.in" }
+                );
+                currentGiftEl.classList.remove('open');
+                currentGiftEl.classList.add('hidden');
+            }
+        }
+
+        const irfanPhoto = document.getElementById('irfan-photo');
+        const masniPhoto = document.getElementById('masni-photo');
+
+        function showPhoto(photoId) {
+            if (irfanPhoto && masniPhoto) {
+                if (photoId === 'irfan') {
+                    irfanPhoto.classList.add('active');
+                    masniPhoto.classList.remove('active');
+                } else if (photoId === 'masni') {
+                    masniPhoto.classList.add('active');
+                    irfanPhoto.classList.remove('active');
+                }
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    colors: ['#C71585', '#e11d48'],
+                    shapes: ['heart'],
+                    scalar: 0.6,
+                    origin: { x: 0.5, y: 0.5 }
+                });
+            }
+        }
+
+        function downloadPoem() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+                <div style="padding: 20px; text-align: center; font-family: 'Great Vibes', 'Playfair Display', serif; font-size: 1.8rem; line-height: 1.6; background: linear-gradient(to right, #FFD700, #DAA520); color: #800020;">
+                    <h2 style="color: #FFD700; font-size: 2.2rem; margin-bottom: 15px;">Puisi untukmu, Masni</h2>
+                    <p>
+                        Selamat ulang tahun, Masni, bintang hatiku, Hari ini dirimu bercahaya, penuh keajaiban. Kasihku padamu tak pernah pudar sedikit pun, Kau adalah anugerah, kebahagiaan yang nyata. Di setiap senyummu, ku temukan dunia, Cintamu adalah lagu yang selalu ku nyanyikan. Semoga hari ini penuh tawa dan harapan, Aku di sini, mencintaimu dengan seluruh jiwa.
+                    </p>
+                </div>
+            `;
+            html2pdf().from(element).save('Puisi_Ulang_Tahun_Masni.pdf');
+        }
+    </script>
+</body>
+</html>
